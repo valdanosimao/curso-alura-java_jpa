@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import br.com.alura.loja.modelo.Pedido;
-import br.com.alura.loja.modelo.Produto;
 
 public class PedidoDao {
 
@@ -56,6 +55,12 @@ public class PedidoDao {
 		String jpql = "SELECT p.preco FROM Pedido p WHERE p.nome = :nome";
 		return em.createQuery(jpql, BigDecimal.class)
 				.setParameter("nome", nome)
+				.getSingleResult();
+	}
+	
+	public BigDecimal valotTotalVendido() {
+		String jpql = "SELECT SUM(p.valorTotal) FROM Pedido p";
+		return em.createQuery(jpql, BigDecimal.class)
 				.getSingleResult();
 	}
 
