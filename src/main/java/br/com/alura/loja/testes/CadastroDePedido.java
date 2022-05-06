@@ -15,6 +15,7 @@ import br.com.alura.loja.modelo.ItemPedido;
 import br.com.alura.loja.modelo.Pedido;
 import br.com.alura.loja.modelo.Produto;
 import br.com.alura.loja.util.JPAUtil;
+import br.com.alura.loja.vo.RelatorioDeVendasVo;
 
 public class CadastroDePedido {
 
@@ -25,46 +26,41 @@ public class CadastroDePedido {
 		ClienteDao clienteDao = new ClienteDao(em);
 		Produto produto = produtoDao.buscarPorId(1L);
 		Cliente cliente = clienteDao.buscarPorId(1L);
-		
-		em.getTransaction().begin();		
-		
-	
+
+		em.getTransaction().begin();
+
 		Pedido pedido = new Pedido(cliente);
-		pedido.adcionarItem(new ItemPedido(10,pedido,produto));
-		
+		pedido.adcionarItem(new ItemPedido(10, pedido, produto));
+
 		PedidoDao pedidoDao = new PedidoDao(em);
-		pedidoDao.cadastrar(pedido);		
-		
+		pedidoDao.cadastrar(pedido);
+
 		em.getTransaction().commit();
-		
+
 		BigDecimal totalVendido = pedidoDao.valotTotalVendido();
 		System.out.println("VALOR TOTAL: " + totalVendido);
-		
-		List<Object[]> relatorio = pedidoDao.relatorioDeVendas();
-		for (Object[] objects : relatorio) {
-			System.out.println(objects[0]);
-			System.out.println(objects[1]);
-			System.out.println(objects[2]);
-		}
+
+		List<RelatorioDeVendasVo> relatorio = pedidoDao.relatorioDeVendas();
+		relatorio.forEach(System.out::println);
 	}
-	
+
 	private static void popularBancoDeDados() {
 		Categoria celulares = new Categoria("CELULARES");
-		Produto celular = new Produto("Xiaomi Redmi", "Muito legal", new BigDecimal("800"), celulares );
+		Produto celular = new Produto("Xiaomi Redmi", "Muito legal", new BigDecimal("800"), celulares);
 
 		Cliente cliente = new Cliente("Valdano", "123456");
-		
+
 		EntityManager em = JPAUtil.getEntityManager();
 		ProdutoDao produtoDao = new ProdutoDao(em);
 		CategoriaDao categoriaDao = new CategoriaDao(em);
 		ClienteDao clienteDao = new ClienteDao(em);
-		
+
 		em.getTransaction().begin();
-		
+
 		categoriaDao.cadastrar(celulares);
 		produtoDao.cadastrar(celular);
 		clienteDao.cadastrar(cliente);
-		
+
 		em.getTransaction().commit();
 		em.close();
 	}
