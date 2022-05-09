@@ -1,4 +1,4 @@
-# curso-alura-java_jpa
+# O que aprendi neste curso?
 #
 ## Aprendi como modelar corretamente relacionamentos bidirecionais
 ## Aprendi a utilizar o recurso de select new para realizar consultas avançadas
